@@ -1,18 +1,23 @@
 package victor.kata.projectservices;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class Exercise {
    private final ProjectServicesService projectServicesService;
    private final UserService userService;
    private final UserServiceHelper userServiceHelper;
    private final ServiceService serviceService;
+
+   public Exercise(ProjectServicesService projectServicesService, UserService userService, UserServiceHelper userServiceHelper, ServiceService serviceService) {
+      this.projectServicesService = projectServicesService;
+      this.userService = userService;
+      this.userServiceHelper = userServiceHelper;
+      this.serviceService = serviceService;
+   }
 
    public void sendUserMessageOnCreate(ProjectUserDTO projectUser, Project project, MessageAction messageAction) {
       if (projectUser.getRole().equals(ProjectUserRoleType.ADMIN)) {
@@ -29,7 +34,7 @@ public class Exercise {
          });
       } else {
          List<String> projectServices = projectUser.getServices();
-         List<victor.training.cleancode.extra.kata.projectservice.Service> services = serviceService.findAll();
+         List<victor.kata.projectservices.Service> services = serviceService.findAll();
 
          projectServices.forEach(pS -> services.forEach(service -> {
             if (service.getName().equals(pS)) {
